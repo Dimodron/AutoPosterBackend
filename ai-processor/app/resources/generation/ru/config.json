@@ -1,0 +1,38 @@
+{
+        "prompt_base" : {
+            "advertising_creative" : "Для рекламного креатива",
+            "business"             : "Для бизнеса",
+            "call_to_action"       : "Для призыва к действию",
+            "training_courses"     : "Для обучающих курсов",
+            "hotels"               : "Для гостиниц",
+            "travelers"            : "Для путешественников",
+            "lifestyle"            : "Для стиля жизни",
+            "medical_services"     : "Для медицинских услуг",
+            "autotematics"         : "Для автотематики",
+            "marketers"            : "Для маркетологов",
+            "fintech"              : "Для финтеха",
+            "restaurants"          : "Для ресторанов",
+            "coffee_shops"         : "Для кофеен",
+            "fitness_centers"      : "Для фитнес-центров",
+            "photographers"        : "Для фотографов",
+            "artists"              : "Для художников"
+        },
+        "ton_of_voice" : {
+            "humorous"      : "Юмористический",
+            "serious"       : "Серьезный",
+            "formal"        : "Формальный",
+            "casual"        : "Непринужденный",
+            "respectful"    : "Уважительный",
+            "disrespectful" : "Непочтительный",
+            "creative"      : "Творческий",
+            "ordinary"      : "Обыденный",
+            "friendly"      : "Дружелюбный",
+            "mentoring"     : "Наставнический",
+            "witty"         : "Остроумный"
+        },
+        "boolean" : {
+            "true" : "Да",
+            "false" : "Нет"
+        }
+}
+    

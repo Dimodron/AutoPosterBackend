@@ -1,0 +1,88 @@
+image: docker:stable
+
+stages:
+  - migrate
+  - deploy
+
+.install_dependencies:
+  before_script:
+    - apk update
+    - apk add --no-cache git git-subtree openssh-client
+
+    - eval "$(ssh-agent -s)"
+    - mkdir -p ~/.ssh
+    - cp "$SSH_PRIVATE_KEY" ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+    - ssh-keyscan -H "$DOKKU_HOST" >> ~/.ssh/known_hosts
+
+migrate:
+  stage: migrate
+  image: node:lts
+  script:
+    - npm install supabase --save-dev
+    - npx supabase db push --db-url $POSTGRESQL_URL
+  only:
+    - main
+
+deploy grpc-text-generation:
+  stage: deploy
+  extends: .install_dependencies
+  only: 
+    - main 
+  script: 
+    - git remote remove dokku_post-generation-ai-grpc || true
+    - git remote add dokku_post-generation-ai-grpc dokku@$DOKKU_HOST:grpc-text-generation
+    - git push dokku_post-generation-ai-grpc $(git subtree split --prefix post-generation-grpc):refs/heads/master --force
+
+
+# deploy grpc-social-telegram:
+#   stage: deploy
+#   extends: .install_dependencies
+#   only: 
+#     - main 
+#   script: 
+#     - git remote remove dokku_telegram-grpc || true
+#     - git remote add dokku_telegram-grpc dokku@$DOKKU_HOST:grpc-social-telegram
+#     - git push dokku_telegram-grpc $(git subtree split --prefix=social-api/telegram-grpc):refs/heads/master --force
+
+# deploy rest-scheduler:
+#   stage: deploy
+#   extends: .install_dependencies
+#   only: 
+#     - main
+#   script: 
+#     - git remote remove dokku_scheduler-api || true
+#     - git remote add dokku_scheduler-api dokku@$DOKKU_HOST:rest-scheduler
+#     - git push dokku_scheduler-api $(git subtree split --prefix scheduler-and-parser-api):refs/heads/master --force
+
+# deploy mq-image-generation:
+#   stage: deploy
+#   extends: .install_dependencies
+#   only: 
+#     - main
+#   script: 
+#     - git remote remove dokku_image-generation-rabbit || true
+#     - git remote add dokku_image-generation-rabbit dokku@$DOKKU_HOST:mq-image-generation
+#     - git push dokku_image-generation-rabbit $(git subtree split --prefix image-generation-rabbit):refs/heads/master --force
+
+# deploy rest-payments:
+#   stage: deploy
+#   extends: .install_dependencies
+#   only: 
+#     - main
+#   script: 
+#     - git remote remove dokku_payment-service || true
+#     - git remote add dokku_payment-service dokku@$DOKKU_HOST:rest-payments
+#     - git push dokku_payment-service $(git subtree split --prefix payment-service):refs/heads/master --force
+
+# deploy api-gateway:
+#   stage: deploy
+#   extends: .install_dependencies
+#   only: 
+#     - main
+#   script: 
+#     - git remote remove dokku_gateway || true
+#     - git remote add dokku_gateway dokku@$DOKKU_HOST:api-gateway
+#     - git push dokku_gateway $(git subtree split --prefix gateway):refs/heads/master --force

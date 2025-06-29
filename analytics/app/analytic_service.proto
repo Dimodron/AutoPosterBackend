@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package ai_generation;
+
+service AnalyticService{
+    rpc ParsingPosts (ParsingPostsRequest) returns (ParsingPostsResponse);
+    rpc AnalyticPosts (AnalyticPostsRequest) returns (AnalyticPostsResponse);
+}
+
+message ParsingPostsRequest{
+    string messenger = 1;
+    string lang = 2;
+}
+
+message ParsingPostsResponse{
+    uint32 code = 1;
+    string detail = 2;
+}
+
+message AnalyticPostsRequest{
+    string messenger = 1;
+    string lang = 2;
+}
+
+message AnalyticPostsResponse{
+    uint32 code = 1;
+    string detail = 2;
+}
+
+

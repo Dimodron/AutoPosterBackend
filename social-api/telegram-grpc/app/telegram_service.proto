@@ -1,0 +1,52 @@
+
+syntax = "proto3";
+
+package interface;
+
+service TelegramControlService {
+    rpc GetContent(GetContentRequest) returns (GetContentResponse);
+    rpc PostContent(PostContentRequest) returns (PostContentResponse);
+}
+
+message GetContentRequest {
+    string channel = 1;
+    uint32 parsing_count = 2;
+    optional string last_post = 3;
+}
+
+message GetContentResponse {
+    uint32 status_code = 1;
+    string detail = 2;
+    repeated ContentData data = 3;
+}
+
+message ContentData{
+    uint32 id =1;
+    uint32 views = 2;
+    uint32 forwards = 3;
+    uint32 replies_count =4;
+    uint32 total_reactions = 5;
+    uint32 stars = 6;
+
+    string posted_at = 7;
+    string content = 8;
+    repeated string url = 9;
+
+    repeated ReactionsBreakdown reactions_breakdown = 10;
+}
+
+message ReactionsBreakdown{
+    string emoji = 1;
+    uint32 count = 2;
+}
+
+message PostContentRequest {
+    string channel = 1;
+    string content = 2;
+    string image_url = 3;
+}
+
+message PostContentResponse {
+    uint32 status_code = 1;
+    string detail = 2;
+}
